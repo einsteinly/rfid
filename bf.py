@@ -12,10 +12,22 @@ while True:
       print("UID: " + str(uid))
       # Select Tag is required before Auth
       if not rdr.select_tag(uid):
+        key = [0, 0, 0, 0, 0, 0]
+        auth_key = [0, 0, 0, 0, 0, 0]
+        for a1 in range(256):
+          for a2 in range(256):
+            for a3 in range(256):
+              for a4 in range(256):
+                for a5 in range(256):
+                  for a6 in range(256):
+                    key = [a1, a2, a3, a4, a5, a6]
+                    status = rdr.card_auth(rdr.auth_a, 10, key, uid)
+                    if not status:
+                      auth_key = key
+                      break
         # Auth for block 10 (block 2 of sector 2) using default shipping key A
-        status = rdr.card_auth(rdr.auth_a, 10, [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF], uid)
-        print(status)
-        if not rdr.card_auth(rdr.auth_a, 10, [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF], uid):
+        print("authorised key: " + str(auth_key))
+        if not rdr.card_auth(rdr.auth_a, 10, auth_key, uid):
           # This will print something like (False, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
           print("Reading block 10: " + str(rdr.read(10)))
           # Always stop crypto1 when done working
