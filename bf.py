@@ -12,27 +12,28 @@ a5 = 0
 a6 = 0
 
 while True:
-  print("epoch " + str(a1+1) + " out of 256")
+  
   rdr.wait_for_tag()
   (error, tag_type) = rdr.request()
   if not error:
-    print("Tag detected")
+#     print("Tag detected")
     (error, uid) = rdr.anticoll()
     if not error:
-      print("UID: " + str(uid))
+#       print("UID: " + str(uid))
       # Select Tag is required before Auth
       if not rdr.select_tag(uid):          
         key = [a1, a2, a3, a4, a5, a6]
+        print(str(key))
         status = rdr.card_auth(rdr.auth_a, 10, key, uid)
         if not status:
           auth_key = key
           print("authorised key: " + str(auth_key))
         # Auth for block 10 (block 2 of sector 2) using default shipping key A
-        if not rdr.card_auth(rdr.auth_a, 10, auth_key, uid):
-          # This will print something like (False, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-          print("Reading block 10: " + str(rdr.read(10)))
-          # Always stop crypto1 when done working
-          rdr.stop_crypto()
+#         if not rdr.card_auth(rdr.auth_a, 10, auth_key, uid):
+#           # This will print something like (False, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+#           print("Reading block 10: " + str(rdr.read(10)))
+#           # Always stop crypto1 when done working
+#           rdr.stop_crypto()
         a6 +=1
         if a6 == 256:
           a6 = 0
