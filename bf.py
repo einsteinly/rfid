@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from pirc522 import RFID
 import time
 rdr = RFID()
@@ -55,5 +54,3 @@ while True:
 
 # Calls GPIO cleanup
 rdr.cleanup()
-=======
->>>>>>> parent of ea722ac... Update bf.py
