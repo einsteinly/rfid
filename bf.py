@@ -15,6 +15,7 @@ while True:
         key = [0, 0, 0, 0, 0, 0]
         auth_key = [0, 0, 0, 0, 0, 0]
         for a1 in range(256):
+          print("epoch " + str(a1+1) + " out of 256")
           for a2 in range(256):
             for a3 in range(256):
               for a4 in range(256):
