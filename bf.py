@@ -28,6 +28,7 @@ while True:
         if not status:
           auth_key = key
           print("authorised key: " + str(auth_key))
+          time.sleep(36000)
         # Auth for block 10 (block 2 of sector 2) using default shipping key A
 #         if not rdr.card_auth(rdr.auth_a, 10, auth_key, uid):
 #           # This will print something like (False, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
