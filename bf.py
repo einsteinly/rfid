@@ -12,7 +12,7 @@ def end_read(signal,frame):
     global continue_reading
     print "Ctrl+C captured, ending read."
     continue_reading = False
-    rdr.cleanup()
+    GPIO.cleanup()
 
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
@@ -44,6 +44,7 @@ while continue_reading:
           auth_key = key
           print("authorised key found: " + str(auth_key))
           print("\n\nterminating now\n\n")
+          GPIO.cleanup()
           break
         # Auth for block 10 (block 2 of sector 2) using default shipping key A
 #         if not rdr.card_auth(rdr.auth_a, 10, auth_key, uid):
