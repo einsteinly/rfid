@@ -1,47 +1,61 @@
 #!/usr/bin/env python
+# -*- coding: utf8 -*-
 
+import RPi.GPIO as GPIO
+import MFRC522
 import signal
-import time
-import sys
 
-from pirc522 import RFID
+continue_reading = True
 
-run = True
-rdr = RFID()
-util = rdr.util()
-util.debug = False
-
+# Capture SIGINT for cleanup when the script is aborted
 def end_read(signal,frame):
-    global run
-    print("\nCtrl+C captured, ending read.")
-    run = False
-    rdr.cleanup()
-    sys.exit()
+    global continue_reading
+    print "Ctrl+C captured, ending read."
+    continue_reading = False
+    GPIO.cleanup()
 
+# Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
 
-print("Starting")
-while run:
-    rdr.wait_for_tag()
+# Create an object of the class MFRC522
+MIFAREReader = MFRC522.MFRC522()
 
-    (error, data) = rdr.request()
-    if not error:
-        print("\nDetected: " + format(data, "02x"))
+# Welcome message
+print "Welcome to the MFRC522 data read example"
+print "Press Ctrl-C to stop."
 
-    (error, uid) = rdr.anticoll()
-    if not error:
-        print("Card read UID: "+str(uid[0])+","+str(uid[1])+","+str(uid[2])+","+str(uid[3]))
+# This loop keeps checking for chips. If one is near it will get the UID and authenticate
+while continue_reading:
+    
+    # Scan for cards    
+    (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
-        print("Setting tag")
-        util.set_tag(uid)
-        print("\nAuthorizing")
-        util.auth(rdr.auth_a, [0x12, 0x34, 0x56, 0x78, 0x96, 0x92])
-        # status = util.auth(rdr.auth_b, [0x74, 0x00, 0x52, 0x35, 0x00, 0xFF])
-        print("Status: "+ str(status))
-        print("\nReading")
-        util.read_out(32)
-        print("\nDeauthorizing")
-        util.deauth()
+    # If a card is found
+    if status == MIFAREReader.MI_OK:
+        print "Card detected"
+    
+    # Get the UID of the card
+    (status,uid) = MIFAREReader.MFRC522_Anticoll()
 
-        print("delaying 3 seconds")
-        time.sleep(3)
+    # If we have the UID, continue
+    if status == MIFAREReader.MI_OK:
+
+        # Print UID
+        print "Card read UID: "+str(uid[0])+","+str(uid[1])+","+str(uid[2])+","+str(uid[3])
+    
+        # This is the default key for authentication
+        key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xF0]
+        
+        # Select the scanned tag
+        MIFAREReader.MFRC522_SelectTag(uid)
+
+        # Authenticate
+        status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
+
+        # Check if authenticated
+        if status == MIFAREReader.MI_OK:
+            MIFAREReader.MFRC522_Read(8)
+            MIFAREReader.MFRC522_StopCrypto1()
+        else:
+            print "Authentication error"
+
