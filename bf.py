@@ -1,21 +1,7 @@
 from pirc522 import RFID
 import time
-import signal
-import RPi.GPIO as GPIO
 
 rdr = RFID()
-
-continue_reading = True
-
-# Capture SIGINT for cleanup when the script is aborted
-def end_read(signal,frame):
-    global continue_reading
-    print "Ctrl+C captured, ending read."
-    continue_reading = False
-    GPIO.cleanup()
-
-# Hook the SIGINT
-signal.signal(signal.SIGINT, end_read)
 
 key = [0, 0, 0, 0, 0, 0]
 auth_key = [0, 0, 0, 0, 0, 0]
@@ -26,7 +12,7 @@ a4 = 255
 a5 = 255
 a6 = 253
 
-while continue_reading:
+while True:
   
   rdr.wait_for_tag()
   (error, tag_type) = rdr.request()
@@ -44,7 +30,6 @@ while continue_reading:
           auth_key = key
           print("authorised key found: " + str(auth_key))
           print("\n\nterminating now\n\n")
-          GPIO.cleanup()
           break
         # Auth for block 10 (block 2 of sector 2) using default shipping key A
 #         if not rdr.card_auth(rdr.auth_a, 10, auth_key, uid):
