@@ -37,8 +37,8 @@ while run:
 
         print("Setting tag")
         util.set_tag(uid)
-        print("\nAuthorizing using key " + str(key[ind]))
-        util.auth(rdr.auth_a, key[ ind ] )
+        print("\nAuthorizing using key " + str(keys[ind]))
+        util.auth(rdr.auth_a, keys[ ind ] )
         ind = ind + 1
         if ind >= 8:
           ind = 0
