@@ -57,6 +57,7 @@ while continue_reading:
         ind = ind + 1
         if ind >= 8:
           ind = 0
+          print("All keys tried. ")
 
         # Check if authenticated
         if status == MIFAREReader.MI_OK:
