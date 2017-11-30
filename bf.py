@@ -4,12 +4,12 @@ rdr = RFID()
 
 key = [0, 0, 0, 0, 0, 0]
 auth_key = [0, 0, 0, 0, 0, 0]
-a1 = 0
-a2 = 0
-a3 = 0
-a4 = 0
-a5 = 0
-a6 = 0
+a1 = 255
+a2 = 255
+a3 = 255
+a4 = 255
+a5 = 255
+a6 = 253
 
 while True:
   
@@ -28,7 +28,7 @@ while True:
         if not status:
           auth_key = key
           print("authorised key: " + str(auth_key))
-          time.sleep(36000)
+          time.sleep(3600000)
         # Auth for block 10 (block 2 of sector 2) using default shipping key A
 #         if not rdr.card_auth(rdr.auth_a, 10, auth_key, uid):
 #           # This will print something like (False, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
