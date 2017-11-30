@@ -56,5 +56,5 @@ while True:
                   if a1 == 256:
                     a1 = 0
 
-  # Calls GPIO cleanup
-  rdr.cleanup()
+# Calls GPIO cleanup
+rdr.cleanup()
