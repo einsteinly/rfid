@@ -1,17 +1,7 @@
 from pirc522 import RFID
 import time
-import signal
 
 rdr = RFID()
-
-# Capture SIGINT for cleanup when the script is aborted
-def end_read(signal,frame):
-    print "Ctrl+C captured, ending read."
-    rdr.cleanup()
-
-# Hook the SIGINT
-signal.signal(signal.SIGINT, end_read)
-
 
 key = [0, 0, 0, 0, 0, 0]
 auth_key = [0, 0, 0, 0, 0, 0]
