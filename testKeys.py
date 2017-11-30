@@ -24,6 +24,7 @@ signal.signal(signal.SIGINT, end_read)
 
 print("Starting")
 while run:
+    ind = 0
     rdr.wait_for_tag()
 
     (error, data) = rdr.request()
@@ -36,8 +37,11 @@ while run:
 
         print("Setting tag")
         util.set_tag(uid)
-        print("\nAuthorizing")
-        util.auth(rdr.auth_a, key[0] )
+        print("\nAuthorizing using key " + str(key[ind]))
+        util.auth(rdr.auth_a, key[ ind ] )
+        ind = ind + 1
+        if ind >= 8:
+          ind = 0
 
         print("Status: "+ str(status))
         print("\nReading")
