@@ -1,7 +1,21 @@
 from pirc522 import RFID
 import time
+import signal
+import RPi.GPIO as GPIO
 
 rdr = RFID()
+
+continue_reading = True
+
+# Capture SIGINT for cleanup when the script is aborted
+def end_read(signal,frame):
+    global continue_reading
+    print "Ctrl+C captured, ending read."
+    continue_reading = False
+    rdr.cleanup()
+
+# Hook the SIGINT
+signal.signal(signal.SIGINT, end_read)
 
 key = [0, 0, 0, 0, 0, 0]
 auth_key = [0, 0, 0, 0, 0, 0]
@@ -12,7 +26,7 @@ a4 = 255
 a5 = 255
 a6 = 253
 
-while True:
+while continue_reading:
   
   rdr.wait_for_tag()
   (error, tag_type) = rdr.request()
@@ -56,5 +70,5 @@ while True:
                   if a1 == 256:
                     a1 = 0
 
-# Calls GPIO cleanup
-rdr.cleanup()
+  # Calls GPIO cleanup
+  rdr.cleanup()
