@@ -1,6 +1,10 @@
 from pirc522 import RFID
 import time
 
+import sys
+f = open("std.out", 'w')
+sys.stdout = f
+
 rdr = RFID()
 
 key = [0, 0, 0, 0, 0, 0]
@@ -58,3 +62,4 @@ while True:
 
 # Calls GPIO cleanup
 rdr.cleanup()
+f.close()
